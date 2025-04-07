@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="orderForm"class="order-form">
+        <h2>place Your order</h2>
+        <form onsubmit="placeorder(event)">
+            <form action="https://formspree.io/f/xwplwvvb" method="POST">
+            <input type="text" id="itemName" placeholder="Food you want" required>
+            <input type="text" id="CustomerName" placeholder="Your Name" required>
+            <input type="text" id="location" placeholder="Delivery Location" required>
+            <input type="tel" id="phone" placeholder="Phone Number" required>
+           <a href="tp.html"> <button type="submit" class="submit-btn">submit order</button></a>
+
+        </form>
+    </div>
+    
+        
+    </script>
+</body>
+</html>

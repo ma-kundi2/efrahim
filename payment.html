@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Service Payment</title>
+  <script src="https://js.stripe.com/v3/"></script>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 2rem; }
+    #card-element { border: 1px solid #ccc; padding: 10px; margin-bottom: 1rem; }
+    #submit { padding: 10px 20px; }
+    #payment-message { color: green; margin-top: 1rem; }
+  </style>
+</head>
+<body>
+
+  <h2>Pay for Service</h2>
+  <form id="payment-form">
+    <div id="card-element"><!-- Stripe injects Card Element here --></div>
+    <button type="submit" id="submit">Pay $50</button>
+    <p id="payment-message"></p>
+  </form>
+
+  <script>
+    const stripe = Stripe('pk_test_YOUR_PUBLISHABLE_KEY'); // Replace with your key
+    const elements = stripe.elements();
+    const card = elements.create('card');
+    card.mount('#card-element');
+
+    const form = document.getElementById('payment-form');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const { token, error } = await stripe.createToken(card);
+
+      if (error) {
+        document.getElementById('payment-message').textContent = error.message;
+      } else {
+        const res = await fetch('/charge', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token: token.id })
+        });
+
+        const result = await res.json();
+        if (result.success) {
+          document.getElementById('payment-message').textContent = 'Payment successful!';
+        } else {
+          document.getElementById('payment-message').textContent = 'Payment failed.';
+        }
+      }
+    });
+  </script>
+
+</body>
+</html>
